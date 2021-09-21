@@ -3,6 +3,7 @@ const express = require('express');
 const multer = require('multer');
 const AWS = require('aws-sdk');
 const { v4: uuid } = require('uuid');
+const fs = require('fs');
 
 const app = express();
 
@@ -35,8 +36,8 @@ const upload = multer({
 
 // Routes
 app.post('/upload', upload.single('file'), (req, res) => {
-    let myFile = req.file.originalname.split(".")
-    const fileExtension = myFile[myFile.length - 1]
+    let myFile = req.file.originalname.split(".");
+    const fileExtension = myFile[myFile.length - 1];
 
     const params = {
         Bucket: process.env.AWS_BUCKET_NAME,
@@ -52,8 +53,27 @@ app.post('/upload', upload.single('file'), (req, res) => {
     })
 });
 
-app.get('/download', (req, res) => {
-
+app.get('/download/:key', (req, res) => {
+    const key = req.params.key;
+    const filePath = req.params.key;
+    console.log(filePath);
+    const params = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: key
+    }
+    s3.getObject(params, (err, data) => {
+        if(err) {
+            console.log(err);
+        }
+        console.log(data);
+        fs.writeFileSync(filePath, data.Body);
+        console.log(`${filePath} has been created!!!`);
+    });
+    s3.deleteObject(params, (err) => {
+        if(err){
+            console.log(err);
+        }
+    })
 });
 
 // Port
