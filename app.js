@@ -30,11 +30,15 @@ const storage = multer.memoryStorage({
 const upload = multer({
     storage,
     limits: {
-        fieldSize: 1024*1024*5
+        fieldSize: 1024*1024*10
     }
 })
 
 // Routes
+app.get('/', (req, res) => {
+    app.get
+})
+
 app.post('/upload', upload.single('file'), (req, res) => {
     let myFile = req.file.originalname.split(".");
     const fileExtension = myFile[myFile.length - 1];
@@ -50,8 +54,8 @@ app.post('/upload', upload.single('file'), (req, res) => {
             res.status(400).send(err);
         }
         res.status(200).send(data);
-    })
-});
+    });
+})
 
 app.get('/download/:key', (req, res) => {
     const key = req.params.key;
@@ -73,10 +77,10 @@ app.get('/download/:key', (req, res) => {
         if(err){
             console.log(err);
         }
-    })
+    });
 });
 
 // Port
 app.listen(3000, () => {
     console.log("listening on port 3000");
-})
+});
