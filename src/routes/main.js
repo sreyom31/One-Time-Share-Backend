@@ -55,9 +55,9 @@ try {
         Key: filePath,
     }
     const data = await s3.getObject(params).promise();
-    await fs.writeFileSync(dirname + '/upload/'+filePath, data.Body);
+    await fs.writeFileSync(__dirname + '/upload/'+filePath, data.Body);
     await s3.deleteObject(params).promise()
-    res.download(dirname + '/upload/'+filePath, filePath,(err)=>{
+    res.download(__dirname + '/upload/'+filePath, filePath,(err)=>{
         if(err){
             res.status(400).send(err);
         }
