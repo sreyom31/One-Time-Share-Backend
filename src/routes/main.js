@@ -29,8 +29,8 @@ router.get('/', (req, res) => {
 
 router.post('/upload', upload.single('file'), async(req, res) => {
     try{
-        const myFile = req.file.originalname;
-        const fileExtension = myFile.slice(-3);
+        let myFile = req.file.originalname.split(".");
+        const fileExtension = myFile[myFile.length - 1];
         const params = {
             Bucket: process.env.AWS_BUCKET_NAME,
             Key: `${uuid()}.${fileExtension}`,
@@ -40,7 +40,6 @@ router.post('/upload', upload.single('file'), async(req, res) => {
             if(err){
                 res.status(503).send(err);
             }
-            console.log(data.key)
             res.status(200).send(data);
         })
     }catch(err){
@@ -57,20 +56,14 @@ try {
         Key: filePath,
     }
     const data = await s3.getObject(params).promise();
-    console.log(data.Body)
-    await res.status(200).send(data.Body);
+    await fs.writeFileSync(dirname + '/upload/'+filePath, data.Body);
     await s3.deleteObject(params).promise()
-    if (fs.existsSync(__dirname + '/upload/'+filePath)) {
-        fs.unlink(__dirname + '/upload/'+filePath, (err) => {
-            if (err) {
-                console.log(err);
-            }
-            console.log('deleted');
-        })
-    }
-    
-    
-
+    res.download(dirname + '/upload/'+filePath, filePath,(err)=>{
+        if(err){
+            res.status(400).send(err);
+        }
+        fs.unlinkSync(__dirname + '/upload/'+filePath)
+    })
 } catch (error) {
     res.status(400).send(error);
 }
