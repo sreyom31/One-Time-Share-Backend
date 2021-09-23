@@ -3,7 +3,7 @@ const mainRouter=require('./routes/main')
 const cors = require('cors');
 const corsOptions ={
     origin:'https://networkplex.netlify.app', 
-    credentials:true, //access-control-allow-credentials:true
+    credentials:true,
     optionSuccessStatus:200
 }
 
