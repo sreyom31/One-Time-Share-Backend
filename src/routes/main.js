@@ -1,4 +1,3 @@
-require('dotenv').config()
 const express =require('express')
 const multer = require('multer');
 const { v4: uuid } = require('uuid');
