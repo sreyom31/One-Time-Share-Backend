@@ -8,7 +8,7 @@
 
 ## Built With
 
-### This project is built using React, Node, Express, Multer, AWS S3.
+### This project is built using React, Node, Express, AWS S3.
 
 ---
 Frontend is made using react library and backend is made using nodejs and express.
@@ -34,7 +34,6 @@ Frontend is deployed on netlify and backend is deployed on heroku.
 
  - [x] React
  - [x] Node
- - [x] AWS Account
 
  *Clone the repository to your loacal machine*
  
